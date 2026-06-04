@@ -194,6 +194,74 @@ All predictions generated at a sprint weekend are automatically flagged with red
 
 ---
 
+### 12. FIA Regulatory & Penalty Patterns
+**Type:** Derived — built from FIA published stewards' decisions + community datasets  
+**Coverage:** Rolling last 3 seasons
+
+The FIA's enforcement approach shifts year to year — different regulatory focuses, varying penalty severity for similar incidents, and changing steward panels all introduce a layer of unpredictability that can materially affect results. This source does not attempt to model favouritism, but instead tracks objectively measurable patterns.
+
+**What is tracked:**
+- Penalty frequency per driver and constructor (current season and rolling average)
+- Penalty severity for categorised incident types (e.g. racing contact, track limits, unsafe release) — are similar incidents receiving consistent outcomes?
+- Investigation-to-penalty conversion rate per team: some teams are investigated frequently but penalties rarely stick; others convert at higher rates
+- Seasonal regulatory focus: each season the FIA tends to prioritise enforcement of specific infraction types (track limits, flexi-wings, pit lane speed, etc.) — characterise the current season's focus area
+- Post-race technical scrutineering outcomes: how often do teams face DSQ risk and which teams carry elevated exposure
+- Steward panel composition where available: decision patterns can vary across different panels
+
+**Derived outputs:**
+- Per-driver penalty risk flag: drivers on warning thresholds or with elevated investigation rates this season
+- Per-team scrutineering risk flag: teams with recent technical investigations
+- Current season enforcement focus note: a short label describing what the FIA is prioritising (e.g. "track limits at high-speed corners", "flexi-floor sensitivity")
+- Circuit-specific risk flag: where the current enforcement focus intersects with a specific circuit's characteristics
+
+**Data sources:**
+- FIA official stewards' decisions (published as PDFs on fia.com — requires parsing or community-compiled datasets)
+- Community-maintained GitHub datasets that compile FIA decisions into structured form
+- Manual curation for current season where automated sources lag
+
+**Important caveat:**  
+This analysis describes statistical patterns in outcomes, not intent. Outputs are framed as risk indicators only — "Driver X has a higher-than-average penalty conversion rate this season" — never as claims about bias. Treat this as one factor among many, weighted modestly.
+
+---
+
+### 13. Rookie Driver Profiles
+**Type:** Derived (junior formula data) + Static (manual annotations)  
+**Coverage:** Any driver in their first or second F1 season
+
+Rookie drivers have no F1 historical data, so predictions for them carry inherently higher uncertainty. This source defines how junior formula data is used as a prior, and how that prior is updated as F1 data accumulates.
+
+**Junior formula baseline (F2 / F3):**
+- Qualifying pace relative to field — translates reasonably well to F1 single-lap ability
+- Championship position and points trajectory
+- Race pace and tyre management — used cautiously; junior tyres behave differently to F1
+- Wet weather performance — useful signal if the junior series had mixed-condition races
+- Incident and DNF rate — early indicator of racecraft under pressure
+- Circuit overlap: where the junior series calendar shares circuits with F1, circuit-specific performance is weighted significantly more heavily than overall stats
+
+**F1 transition weighting:**
+- Pre-season and early rounds: junior formula data is the primary input, with wide uncertainty bands applied to all outputs
+- After 4–5 F1 races: real F1 data begins taking over as the primary signal; junior data weighting reduces race by race
+- After a full season: treated as an experienced driver with a full F1 profile; junior data is archived
+
+**Teammate delta as primary metric:**  
+Absolute rookie results are heavily influenced by car quality and are difficult to interpret in isolation. The primary performance signal is pace relative to their experienced teammate — this strips out car quality and gives a cleaner driver-vs-driver comparison. This is the most reliable indicator of a rookie's true level during their first season.
+
+**Car quality context:**  
+All rookie outputs explicitly note the car context. A rookie finishing P14 in a backmarker team and a rookie finishing P14 in a top team are completely different situations. Predictions are normalised against expected car performance, not absolute grid position.
+
+**Manually annotated:**
+- First F1 season flag
+- Circuits where the driver has prior experience from junior formulae
+- Known strengths or weaknesses carried over from junior categories
+- Team environment assessment: some teams develop rookies effectively; others provide limited support infrastructure
+
+**Known limitations for rookies:**
+- How quickly a specific driver adapts to F1 tyre behaviour varies enormously and is not predictable from junior data
+- Psychological response to the step up in media pressure and championship stakes is unquantifiable
+- Some drivers adapt faster than any data would suggest; others take longer than expected
+
+---
+
 ## Known Limitations
 
 These are factors that are genuinely outside the reach of any data-driven prediction model. They are documented here so that predictions are interpreted with appropriate honesty about what the model cannot know.
@@ -241,3 +309,5 @@ A red flag resets the race in ways that can completely override pre-race strateg
 | Reliability & DNF tracker | Derived (Jolpica) | Computed | Updated each race |
 | Safety car probability | Derived (Jolpica) | Computed | Static per circuit, reviewed annually |
 | Sprint weekend flag | Calendar | Static | Set at season start |
+| FIA penalty & regulatory patterns | FIA decisions + community datasets | Derived + Manual | Updated each race |
+| Rookie driver profiles | F2/F3 data + manual annotations | Derived + Manual | Updated each race; transitions to F1 actuals |
