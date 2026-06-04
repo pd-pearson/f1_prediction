@@ -194,7 +194,7 @@ This agent scores drivers indirectly — a team with a strong, proactive strateg
 ---
 
 ### Agent 7: Driver Form & Track Relationships
-**Domain:** Current driver form, track affinity, and psychological factors  
+**Domain:** Current driver form, track affinity, psychological factors, and driver ceiling  
 **Sources:** Driver Profile (derived + manual), Jolpica  
 **Available from:** All stages
 
@@ -204,6 +204,20 @@ This agent scores drivers indirectly — a team with a strong, proactive strateg
 - Psychological modifier: qualitative flag only — not a hard score adjustment
 - Wet weather rating
 - Overtaking and defending tendency at this circuit type
+
+**Driver Ceiling Rating**
+
+A slow-moving, manually auditable rating representing a driver's known capability ceiling — distinct from current form. It is derived from objective career metrics: wins, championships, and crucially the car-normalised performance delta (how consistently a driver outperforms what their car should theoretically achieve, measured against teammates across multiple seasons and multiple cars).
+
+The ceiling rating is **not used to inflate baseline predictions**. If current data places a driver as fourth-fastest, they are predicted fourth. The ceiling serves three specific purposes only:
+
+1. **Chaos scenario modifier** — in wet races, safety car restarts, or strategically unpredictable conditions, car pace differentials compress and driver quality becomes the primary differentiator. In these scenarios only, the ceiling rating applies a modest upward modifier. A dry race with a clear car hierarchy is not a chaos scenario.
+
+2. **Upper bound plausibility** — when an exceptional lap or move occurs, the model does not flag it as an anomaly. The ceiling establishes that this outcome was within the driver's known range without the model having predicted it.
+
+3. **Output narrative context** — surfaces in the "key things to watch" section as qualitative context only: *"Predicted P4 based on current car pace. If the race becomes chaotic or conditions shift, this driver's ceiling suggests they can go higher — the dry pace delta does not support predicting that outcome."*
+
+Ceiling ratings are stored in the static driver profile file, visible in the report output with their component rationale (career wins, teammate deltas, multi-car evidence). They update slowly — declining only with sustained, car-normalised evidence of genuine decline, not a run of results in an off-pace car. Asymmetric by design: more evidence is required to revise a top-tier rating downward than to set it in the first place.
 
 ---
 

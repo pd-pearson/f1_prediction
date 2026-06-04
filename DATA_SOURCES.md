@@ -303,6 +303,11 @@ The reliability tracker captures trends, but a random hydraulic failure or gearb
 ### Red Flag Stoppages
 A red flag resets the race in ways that can completely override pre-race strategy — allowing tyre changes under red flag conditions, compressing field gaps, and forcing teams into decisions not in any pre-race plan.
 
+### Generational Talent in an Off-Pace Car
+The model predicts race results, not driver quality. If current data places a driver as fourth-fastest, they are predicted fourth — regardless of their career record. A generational talent in a car that is genuinely half a second off the pace cannot be predicted to win on talent alone.
+
+The driver ceiling rating (see SUBAGENT_SCHEMA.md) provides context and applies a modest modifier in chaotic conditions, but it does not override the car pace signal in normal race conditions. This is an intentional constraint to prevent personal bias from inflating predictions for admired drivers. The honest prediction is the data-supported one. Exceptional performances beyond that — the mega lap, the inspired strategic call — are flagged as plausible given ceiling context, but never predicted as the baseline outcome.
+
 ---
 
 ## Source Summary
