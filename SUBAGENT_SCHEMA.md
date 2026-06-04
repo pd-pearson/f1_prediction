@@ -106,17 +106,50 @@ Establishes a historical baseline independent of the current weekend:
 ---
 
 ### Agent 3: Weather Forecast
-**Domain:** Weather conditions and their strategic implications  
+**Domain:** Weather conditions across all thermally and physically relevant dimensions  
 **Sources:** Open-Meteo (forecast), FastF1 (session actuals)  
 **Available from:** All stages
 
-- Current and forecast temperature, precipitation probability, wind
-- Wet race probability for race day window
-- Historical weather patterns at this circuit and date
-- Scenario flags: dry / mixed / wet, and how likely each is
+Weather is not simply wet or dry. This agent models four distinct dimensions that each affect the race differently.
+
+**Track Temperature**
+- Forecast track temperature at race start and at expected pit window laps
+- Track temp is typically 15–20°C above air temp but varies by surface colour, cloud cover, and time of day
+- Time-of-day gradient: races that span an afternoon-to-evening window (Abu Dhabi, Qatar) see significant track cooling mid-race, which shifts tyre behaviour and viable strategy windows
+- Historical track temp at this circuit and date for multi-year comparison
+- Primary input to the Tyre & Strategy agent's degradation model
+
+**Air / Atmospheric Temperature**
+- Forecast air temperature at session times
+- Engine cooling implications: hotter air forces wider cooling configurations, affecting drag and downforce balance — this is a constructor-level differentiator and is flagged per team
+- Air density effect on power unit and turbocharger efficiency at peak demand
+- Per-constructor cooling sensitivity flag (manually maintained): some PUs and chassis are more exposed to high ambient temperatures than others
+- Humidity: compounds heat stress for drivers and marginally affects engine cooling efficiency
+
+**Driver Heat Stress**
+- Cockpit temperatures estimated from air temp, track temp, and circuit layout (slow circuits with less airflow are hotter)
+- Historical driver performance at hot-race circuits (derived from driver profile data): identifies drivers who demonstrably underperform relative to car pace in high-heat conditions
+- Per-driver heat tolerance rating (derived from results at circuits historically above 40°C track temp)
+- Flag for extreme heat events where driver condition may become a direct performance or safety factor (threshold: sustained track temp above 55°C)
+
+**Wind**
+- Wind speed and direction forecast
+- Circuit-specific wind sensitivity flag: some venues are highly exposed (Baku, Jeddah, Spa) where wind direction materially affects corner behaviour and straight-line top speed
+- Headwind/tailwind on primary straight: affects fuel consumption and top speed delta between teams
+
+**Precipitation**
+- Wet race probability for each session window
+- Scenario flags: dry / mixed / wet, with associated probabilities
+- Historical precipitation patterns at this circuit and date
 - Per-driver wet weather performance rating (fed from driver profile data)
 
-Output includes a scenario weighting (e.g. 70% dry, 20% mixed, 10% wet) that the Orchestrator uses to blend scenario-specific predictions.
+**Outputs:**
+- Scenario probability distribution (e.g. 65% dry / 25% mixed / 10% wet)
+- Track temperature forecast with time-of-day gradient profile
+- Constructor cooling risk flags
+- Driver heat stress flags
+- Wind sensitivity flag for the circuit
+- All temperature values passed directly to the Tyre & Strategy agent as primary inputs to the degradation model
 
 ---
 

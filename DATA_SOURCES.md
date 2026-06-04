@@ -46,13 +46,24 @@ The successor to the Ergast API. Used for historical baseline statistics:
 **Type:** Dynamic — fetched pre-session  
 **Coverage:** Global, historical + 7-day forecast
 
-Used for pre-session weather forecasting, particularly for race-day predictions where weather can significantly affect tyre strategy. Provides:
+Used for pre-session weather forecasting. No API key required. Weather analysis covers four distinct dimensions — precipitation is the least of them.
 
-- Hourly temperature, precipitation probability, wind, humidity
-- Historical weather for any circuit date (for multi-year pattern analysis)
-- No API key required
+**Track temperature**
+Track surface temp is typically 15–20°C above air temp and is the primary driver of tyre degradation. It also changes through a race: sessions spanning an afternoon-to-evening window (Abu Dhabi, Qatar) see track cooling mid-race that shifts tyre behaviour and viable strategy windows. Track temp forecasts are the primary input to the Tyre Degradation Model.
 
-Note: FastF1 provides actual weather during a session. Open-Meteo is used for forecasting before sessions begin.
+**Air / atmospheric temperature**
+Hotter ambient air forces wider cooling configurations on the car, affecting drag and downforce balance. This varies by constructor — some PU and chassis combinations are more sensitive to high ambient temperatures than others. Air density also affects turbocharger efficiency at peak demand. Humidity compounds engine cooling demands and driver heat stress.
+
+**Driver heat stress**
+Cockpit temperatures can exceed 50°C in high-heat conditions. Some drivers demonstrably underperform relative to car pace at hot circuits — this is tracked historically and combined with ambient temperature forecasts to flag heat stress risk per driver. Extreme heat events (sustained track temp above ~55°C) are flagged explicitly.
+
+**Wind**
+Wind direction and speed are captured because at exposed circuits (Baku, Jeddah, Spa) they materially affect corner behaviour and straight-line speed. Headwind/tailwind on the primary straight affects top speed and fuel consumption differentials between teams.
+
+**Precipitation**
+Wet race probability per session window, scenario probabilities (dry / mixed / wet), and historical precipitation patterns at this circuit and date.
+
+Note: FastF1 provides actual measured weather during a live session. Open-Meteo is used for pre-session forecasting only.
 
 ---
 
